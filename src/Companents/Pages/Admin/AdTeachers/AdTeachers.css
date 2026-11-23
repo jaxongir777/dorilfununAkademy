@@ -1,0 +1,387 @@
+
+.ad-teachers {
+  width: 100%;
+  padding: 25px;
+  color: #1f2937;
+}
+
+.ad-teachers-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.ad-teachers-top h2 {
+  font-size: 25px;
+  margin: 0 0 6px;
+}
+
+.ad-teachers-top p {
+  color: #64748b;
+  margin: 0;
+}
+
+.ad-teachers-add,
+.ad-teachers-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ad-teachers-add:hover,
+.ad-teachers-save:hover {
+  background: #1d4ed8;
+}
+
+.ad-teachers-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 220px));
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.ad-teachers-stat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 13px;
+}
+
+.ad-teachers-stat-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.ad-teachers-stat span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.ad-teachers-stat h3 {
+  margin: 4px 0 0;
+  font-size: 24px;
+}
+
+.ad-teachers-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 450px;
+  padding: 0 14px;
+  margin-bottom: 20px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #64748b;
+}
+
+.ad-teachers-search input {
+  width: 100%;
+  height: 46px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+.ad-teachers-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.ad-teacher-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 13px;
+}
+
+.ad-teacher-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.ad-teacher-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ad-teacher-info h3 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.ad-teacher-info p {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-size: 13px;
+}
+
+.ad-teacher-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.ad-teacher-details span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ad-teacher-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.ad-teacher-actions button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ad-teacher-edit {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.ad-teacher-delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.ad-teachers-empty {
+  grid-column: 1 / -1;
+  padding: 55px 20px;
+  text-align: center;
+  color: #64748b;
+  background: white;
+  border: 1px dashed #cbd5e1;
+  border-radius: 13px;
+}
+
+.ad-teachers-empty h3 {
+  margin: 12px 0 6px;
+  color: #1f2937;
+}
+
+.ad-teachers-empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.ad-teachers-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.55);
+  overflow-y: auto;
+}
+
+.ad-teachers-modal {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  padding: 24px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.ad-teachers-modal-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.ad-teachers-modal-top h3 {
+  margin: 0 0 6px;
+  font-size: 21px;
+}
+
+.ad-teachers-modal-top p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.ad-teachers-modal-top > button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f5f9;
+  cursor: pointer;
+}
+
+.ad-teachers-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ad-teachers-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ad-teachers-modal label > input,
+.ad-teachers-password input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dbe1e8;
+  border-radius: 9px;
+  outline: none;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.ad-teachers-modal input:focus {
+  border-color: #2563eb;
+}
+
+.ad-teachers-password {
+  position: relative;
+}
+
+.ad-teachers-password input {
+  padding-right: 45px;
+}
+
+.ad-teachers-password button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.ad-teachers-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+.ad-teachers-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.ad-teachers-cancel {
+  padding: 11px 16px;
+  border: 1px solid #dbe1e8;
+  border-radius: 9px;
+  background: white;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .ad-teachers-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ad-teachers {
+    padding: 15px;
+  }
+
+  .ad-teachers-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ad-teachers-add {
+    width: 100%;
+  }
+
+  .ad-teachers-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ad-teachers-stat {
+    padding: 12px;
+    gap: 9px;
+  }
+
+  .ad-teachers-stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ad-teachers-stat h3 {
+    font-size: 20px;
+  }
+
+  .ad-teacher-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 14px;
+  }
+
+  .ad-teacher-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .ad-teachers-modal {
+    padding: 18px;
+  }
+}

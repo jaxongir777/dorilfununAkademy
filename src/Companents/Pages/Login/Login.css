@@ -1,0 +1,275 @@
+
+/* =========================
+   LOGIN PAGE
+========================= */
+
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(200, 164, 93, 0.13), transparent 35%),
+    radial-gradient(circle at 85% 85%, rgba(200, 164, 93, 0.09), transparent 35%),
+    #101c2c;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* =========================
+   LOGIN CARD
+========================= */
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid rgba(200, 164, 93, 0.2);
+  border-radius: clamp(14px, 2vw, 20px);
+  background: #f7f5ef;
+  color: #101c2c;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.login-logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+}
+
+.login-logo img {
+  width: clamp(90px, 22vw, 120px);
+  height: clamp(90px, 22vw, 120px);
+  object-fit: contain;
+  display: block;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.login-card h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(21px, 4vw, 27px);
+  line-height: 1.3;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.login-subtitle {
+  margin: 10px 0 30px;
+  text-align: center;
+  color: #777;
+  font-size: clamp(13px, 2.5vw, 15px);
+  line-height: 1.5;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.login-card label {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-card input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #101c2c;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-card input:focus {
+  border-color: #c8a45d;
+  box-shadow: 0 0 0 3px rgba(200, 164, 93, 0.15);
+}
+
+.login-card input::placeholder {
+  color: #aaa;
+}
+
+/* =========================
+   PASSWORD
+========================= */
+
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.password-field input {
+  flex: 1;
+}
+
+.password-field button {
+  min-height: 44px;
+  padding: 0 5px;
+  border: none;
+  background: transparent;
+  color: #8a6b32;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.password-field button:hover {
+  color: #101c2c;
+}
+
+/* =========================
+   LOGIN BUTTON
+========================= */
+
+.login-submit {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 14px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #c8a45d;
+  color: #101c2c;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.login-submit:hover {
+  background: #b38d45;
+  transform: translateY(-1px);
+}
+
+.login-submit:active {
+  transform: scale(0.98);
+}
+
+.login-card button:focus-visible {
+  outline: 3px solid rgba(200, 164, 93, 0.55);
+  outline-offset: 3px;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 24px;
+  }
+
+  .login-card {
+    max-width: 420px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 18px;
+  }
+
+  .login-card {
+    padding: 28px 22px;
+  }
+
+  .login-subtitle {
+    margin-bottom: 24px;
+  }
+
+  .login-card input {
+    height: 46px;
+    font-size: 14px;
+  }
+
+  .login-submit {
+    min-height: 48px;
+    font-size: 15px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 360px) {
+  .login-page {
+    padding: 12px;
+  }
+
+  .login-card {
+    padding: 24px 16px;
+  }
+
+  .login-card h1 {
+    font-size: 20px;
+  }
+
+  .password-field {
+    gap: 3px;
+  }
+
+  .password-field button {
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   SHORT SCREEN
+========================= */
+
+@media (max-height: 550px) {
+  .login-page {
+    align-items: flex-start;
+  }
+
+  .login-card {
+    margin: 10px auto;
+  }
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .login-card *,
+  .login-card *::before,
+  .login-card *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
