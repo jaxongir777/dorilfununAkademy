@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   UserPlus,
   Search,
@@ -9,46 +8,51 @@ import {
   Users,
   BookOpen,
   Phone,
-  Lock,
   User,
   Eye,
   EyeOff
 } from 'lucide-react'
+import { getTeachers, saveUser, deleteUser } from '../../../Utils/api.js'
 import './AdTeachers.css'
 
-const TEACHERS_KEY = 'teachers'
-
-const readStorage = (key) => {
-  try {
-    const data = JSON.parse(localStorage.getItem(key) || '[]')
-    return Array.isArray(data) ? data : []
-  } catch {
-    return []
-  }
+const emptyForm = {
+  name: '',
+  username: '',
+  password: '',
+  phone: '',
+  subject: ''
 }
 
 const AdTeachers = () => {
-  const [teachers, setTeachers] = useState(() => readStorage(TEACHERS_KEY))
+  const [teachers, setTeachers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingTeacher, setEditingTeacher] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-
-  const emptyForm = {
-    name: '',
-    username: '',
-    password: '',
-    phone: '',
-    subject: ''
-  }
-
   const [form, setForm] = useState(emptyForm)
 
+  const loadTeachers = useCallback(async () => {
+    try {
+      const list = await getTeachers()
+      setTeachers(list)
+
+      // Vaqtincha: Grupps.jsx hali localStorage'dan o'qiydi
+      localStorage.setItem('teachers', JSON.stringify(list))
+      window.dispatchEvent(new Event('academyDataUpdated'))
+    } catch (err) {
+      console.error(err)
+      setError('Ustozlarni yuklab bo‘lmadi. Internetni tekshiring.')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
-    localStorage.setItem(TEACHERS_KEY, JSON.stringify(teachers))
-    window.dispatchEvent(new Event('academyDataUpdated'))
-  }, [teachers])
+    loadTeachers()
+  }, [loadTeachers])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -68,7 +72,7 @@ const AdTeachers = () => {
     setForm({
       name: teacher.name || '',
       username: teacher.username || '',
-      password: teacher.password || '',
+      password: '',
       phone: teacher.phone || '',
       subject: teacher.subject || ''
     })
@@ -77,7 +81,14 @@ const AdTeachers = () => {
     setShowModal(true)
   }
 
-  const handleSubmit = (e) => {
+  const closeModal = () => {
+    setShowModal(false)
+    setForm(emptyForm)
+    setEditingTeacher(null)
+    setError('')
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
@@ -87,63 +98,65 @@ const AdTeachers = () => {
     const phone = form.phone.trim()
     const subject = form.subject.trim()
 
-    if (!name || !username || !password || !subject) {
+    if (!name || !username || !subject) {
       setError('Majburiy maydonlarni to‘ldiring!')
       return
     }
 
-    const staticUsers = readStorage('students')
-    const defaultUsers = window.__academyDefaultUsers || []
-
-    const usernameExists = [
-      ...teachers.filter(t => String(t.id) !== String(editingTeacher?.id)),
-      ...staticUsers,
-      ...defaultUsers
-    ].some(user => user.username?.trim().toLowerCase() === username.toLowerCase())
-
-    if (usernameExists) {
-      setError('Bu login band. Boshqa login kiriting!')
+    if (!editingTeacher && !password) {
+      setError('Yangi ustoz uchun parol kiriting!')
       return
     }
 
-    if (editingTeacher) {
-      setTeachers(prev => prev.map(teacher =>
-        String(teacher.id) === String(editingTeacher.id)
-          ? {
-              ...teacher,
-              name,
-              username,
-              password,
-              phone,
-              subject
-            }
-          : teacher
-      ))
-    } else {
-      const newTeacher = {
-        id: Date.now(),
+    if (password && password.length < 4) {
+      setError('Parol kamida 4 ta belgidan iborat bo‘lsin.')
+      return
+    }
+
+    setSaving(true)
+
+    try {
+      await saveUser({
+        id: editingTeacher?.id ?? null,
         role: 'teacher',
         name,
         username,
         password,
         phone,
         subject,
-        isFrozen: false
+        isFrozen: editingTeacher?.isFrozen || false,
+        points: 0,
+        missedLessons: 0
+      })
+
+      await loadTeachers()
+      closeModal()
+    } catch (err) {
+      console.error(err)
+
+      if (String(err.message).includes('academy_users_username_key')) {
+        setError('Bu login band. Boshqa login kiriting!')
+      } else {
+        setError('Saqlab bo‘lmadi. Qayta urinib ko‘ring.')
       }
-
-      setTeachers(prev => [...prev, newTeacher])
+    } finally {
+      setSaving(false)
     }
-
-    setShowModal(false)
-    setForm(emptyForm)
-    setEditingTeacher(null)
   }
 
-  const deleteTeacher = (id) => {
-    const confirmed = window.confirm('Ushbu ustozni o‘chirmoqchimisiz?')
+  const handleDelete = async (teacher) => {
+    const confirmed = window.confirm(
+      `${teacher.name} ismli ustozni o‘chirmoqchimisiz?`
+    )
     if (!confirmed) return
 
-    setTeachers(prev => prev.filter(teacher => String(teacher.id) !== String(id)))
+    try {
+      await deleteUser(teacher.id)
+      await loadTeachers()
+    } catch (err) {
+      console.error(err)
+      alert('O‘chirib bo‘lmadi. Qayta urinib ko‘ring.')
+    }
   }
 
   const filteredTeachers = teachers.filter(teacher =>
@@ -199,7 +212,11 @@ const AdTeachers = () => {
       </div>
 
       <div className="ad-teachers-list">
-        {filteredTeachers.length > 0 ? (
+        {loading ? (
+          <div className="ad-teachers-empty">
+            <h3>Yuklanmoqda...</h3>
+          </div>
+        ) : filteredTeachers.length > 0 ? (
           filteredTeachers.map((teacher) => (
             <div className="ad-teacher-card" key={teacher.id}>
               <div className="ad-teacher-avatar">
@@ -232,7 +249,7 @@ const AdTeachers = () => {
 
                 <button
                   className="ad-teacher-delete"
-                  onClick={() => deleteTeacher(teacher.id)}
+                  onClick={() => handleDelete(teacher)}
                   title="O‘chirish"
                 >
                   <Trash2 size={17} />
@@ -250,7 +267,7 @@ const AdTeachers = () => {
       </div>
 
       {showModal && (
-        <div className="ad-teachers-overlay" onClick={() => setShowModal(false)}>
+        <div className="ad-teachers-overlay" onClick={closeModal}>
           <div
             className="ad-teachers-modal"
             onClick={e => e.stopPropagation()}
@@ -261,7 +278,7 @@ const AdTeachers = () => {
                 <p>Ustoz ma’lumotlarini kiriting</p>
               </div>
 
-              <button onClick={() => setShowModal(false)}>
+              <button type="button" onClick={closeModal}>
                 <X size={21} />
               </button>
             </div>
@@ -288,14 +305,18 @@ const AdTeachers = () => {
               </label>
 
               <label>
-                Parol *
+                Parol {editingTeacher ? '' : '*'}
                 <div className="ad-teachers-password">
                   <input
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     value={form.password}
                     onChange={handleChange}
-                    placeholder="Parol kiriting"
+                    placeholder={
+                      editingTeacher
+                        ? 'O‘zgartirmasangiz, eski parol qoladi'
+                        : 'Parol kiriting'
+                    }
                   />
                   <button
                     type="button"
@@ -332,13 +353,19 @@ const AdTeachers = () => {
                 <button
                   type="button"
                   className="ad-teachers-cancel"
-                  onClick={() => setShowModal(false)}
+                  onClick={closeModal}
                 >
                   Bekor qilish
                 </button>
 
-                <button type="submit" className="ad-teachers-save">
-                  {editingTeacher ? 'Saqlash' : 'Ustoz qo‘shish'}
+                <button
+                  type="submit"
+                  className="ad-teachers-save"
+                  disabled={saving}
+                >
+                  {saving
+                    ? 'Saqlanmoqda...'
+                    : editingTeacher ? 'Saqlash' : 'Ustoz qo‘shish'}
                 </button>
               </div>
             </form>
